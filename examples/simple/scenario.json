@@ -1,0 +1,59 @@
+{
+    "problem": {
+        "eventid": "2142364",
+        "source": "0",
+        "object": "0",
+        "objectid": "85794",
+        "clock": "1743533865",
+        "value": "1",
+        "acknowledged": "0",
+        "ns": "203056602",
+        "name": "GET http://nelson.lib.berkeley.edu:8080/ FAILED",
+        "severity": "4",
+        "r_eventid": "2142368",
+        "c_eventid": "0",
+        "correlationid": "0",
+        "userid": "0",
+        "cause_eventid": "0",
+        "hosts": [
+            {
+                "hostid": "10778",
+                "name": "nelson",
+                "status": "0"
+            }
+        ],
+        "opdata": "",
+        "suppressed": "0",
+        "urls": []
+    },
+    "possible_causes": [
+        {
+            "eventid": "2142362",
+            "clock": "1743533848",
+            "name": "/var: Running out of free inodes (free < 10%)",
+            "value": "1",
+            "hosts": [
+                {
+                    "hostid": "10778",
+                    "name": "nelson",
+                    "status": "0"
+                }
+            ],
+            "opdata": "Free inodes: 99.8962 %"
+        },
+        {
+            "eventid": "2142341",
+            "clock": "1743532828",
+            "name": "/var: Running out of free inodes (free < 10%)",
+            "value": "1",
+            "hosts": [
+                {
+                    "hostid": "10778",
+                    "name": "nelson",
+                    "status": "0"
+                }
+            ],
+            "opdata": "Free inodes: 99.8962 %"
+        }
+    ]
+}
