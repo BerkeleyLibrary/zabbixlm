@@ -43,8 +43,11 @@ pipenv run update-reqs
 
 See the [examples](./examples) directory for example scenarios, each complete with a README, scenario.json, and sample output. The header of the output indicates which LLM produced it.
 
-## Open Questions
+## Questions / TODO's
 
 1. How do models respond to event ordering? Are they robust to the order of problem/event data, or are they smart enough to reason about the event 'clock' attribute?
 2. Do the System Prompt tweaks needed for the model to work with Faker() compromise its real-world ability?
-3. … Many, many more. There is a LOT to test.
+3. The existing queries to pull data out of Zabbix are pretty weak. We could definitely improve them.
+4. It's worth experimenting with how raw data is provided to the LLM. Changes to the System Prompt have had large effects, I suspect data format would as well.
+
+… And many, many more. There is a LOT to discover.
