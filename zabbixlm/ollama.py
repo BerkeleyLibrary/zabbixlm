@@ -29,6 +29,10 @@ class Ollama:
             num_ctx=num_ctx,
         )
 
+    @property
+    def model(self):
+        return self._llm.model
+
     def diagnose(self, problem, possible_causes):
         prompt = PromptTemplate(
             input_variables=['problem', 'possible_causes'],
@@ -42,6 +46,6 @@ class Ollama:
 
         reply = (prompt | self._llm).invoke(scenario)
 
-        logger.info({ 'model': self._llm.model, 'reply': reply, 'scenario': scenario })
+        logger.info({ 'model': self.model, 'reply': reply, 'scenario': scenario })
 
         return reply

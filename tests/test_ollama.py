@@ -1,3 +1,5 @@
+import json
+import os
 import pytest
 import random
 from faker import Faker
@@ -66,11 +68,9 @@ def simple_causes():
         }
     ]
 
-@pytest.fixture
-def noisy_causes(simple_causes):
+def generate_noisy_causes(real_causes, noise_count=25):
     fake = Faker()
-    noise_count = 25
-    noisy_causes = simple_causes + [
+    noisy_causes = real_causes + [
         {
             "eventid": 2142341 - i - 1,
             "clock": 1743532828 - i - 1,
@@ -93,6 +93,19 @@ def noisy_causes(simple_causes):
 
     return noisy_causes
 
+def write_example(name, llm, scenario, diagnosis):
+    try:
+        os.mkdir(f'examples/{name}')
+    except FileExistsError:
+        pass
+
+    with open(f'examples/{name}/scenario.json', 'w') as fh:
+        json.dump(scenario, fh)
+
+    with open(f'examples/{name}/response.md', 'w') as fh:
+        fh.write(f'---\nmodel: {llm.model}\n---\n\n')
+        fh.write(diagnosis.content)
+
 def test_identifies_inode_exhaustion_in_simple_scenario(web_failure, simple_causes):
     llm = Ollama()
     diagnosis = llm.diagnose(web_failure, simple_causes)
@@ -100,9 +113,20 @@ def test_identifies_inode_exhaustion_in_simple_scenario(web_failure, simple_caus
     assert content.startswith('the most likely cause')
     assert 'inode' in content
 
-def test_identifies_inode_exhaustion_when_there_is_random_noise(web_failure, noisy_causes):
+@pytest.mark.parametrize('noise_count', [(25), (50)])
+def test_identifies_inode_exhaustion_with_random_events(web_failure, simple_causes, noise_count):
+    noisy_causes = generate_noisy_causes(simple_causes, noise_count)
+
     llm = Ollama()
     diagnosis = llm.diagnose(web_failure, noisy_causes)
     content = diagnosis.content.strip().lower()
+
+    write_example(
+        name=f'noisy-{noise_count}',
+        llm=llm,
+        scenario={ 'problem': web_failure, 'possible_causes': noisy_causes },
+        diagnosis=diagnosis,
+    )
+
     assert content.startswith('the most likely cause')
     assert 'inode' in content
